@@ -3,6 +3,14 @@ import { Platform, StyleSheet, Text, View } from "react-native";
 import io from "socket.io-client";
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    const socket = io("http://192.168.0.27:3000");
+  }
+
   render() {
     return (
       <View style={styles.container}>
