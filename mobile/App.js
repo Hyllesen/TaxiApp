@@ -1,21 +1,36 @@
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { TextInput, StyleSheet, Text, View } from "react-native";
 import io from "socket.io-client";
 
 export default class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      chatMessage: ""
+    };
   }
 
   componentDidMount() {
-    const socket = io("http://192.168.0.27:3000");
+    this.socket = io("http://192.168.0.27:3000");
+  }
+
+  submitChatMessage() {
+    this.socket.emit("chat message", this.state.chatMessage);
+    this.setState({ chatMessage: "" });
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
+        <TextInput
+          style={{ height: 40, borderWidth: 2 }}
+          autoCorrect={false}
+          value={this.state.chatMessage}
+          onSubmitEditing={() => this.submitChatMessage()}
+          onChangeText={chatMessage => {
+            this.setState({ chatMessage });
+          }}
+        />
       </View>
     );
   }
@@ -24,18 +39,6 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "#F5FCFF"
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10
-  },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    marginBottom: 5
   }
 });
