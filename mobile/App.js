@@ -6,12 +6,16 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chatMessage: ""
+      chatMessage: "",
+      chatMessages: []
     };
   }
 
   componentDidMount() {
     this.socket = io("http://192.168.0.27:3000");
+    this.socket.on("chat message", msg => {
+      this.setState({ chatMessages: [...this.state.chatMessages, msg] });
+    });
   }
 
   submitChatMessage() {
@@ -20,6 +24,10 @@ export default class App extends Component {
   }
 
   render() {
+    const chatMessages = this.state.chatMessages.map(chatMessage => (
+      <Text key={chatMessage}>{chatMessage}</Text>
+    ));
+
     return (
       <View style={styles.container}>
         <TextInput
@@ -31,6 +39,7 @@ export default class App extends Component {
             this.setState({ chatMessage });
           }}
         />
+        {chatMessages}
       </View>
     );
   }
