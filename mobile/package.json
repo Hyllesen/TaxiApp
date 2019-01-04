@@ -9,6 +9,7 @@
   "dependencies": {
     "react": "16.6.3",
     "react-native": "0.57.8",
+    "react-native-maps": "^0.22.1",
     "socket.io-client": "^2.2.0"
   },
   "devDependencies": {

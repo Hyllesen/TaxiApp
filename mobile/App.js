@@ -1,45 +1,40 @@
 import React, { Component } from "react";
-import { TextInput, StyleSheet, Text, View } from "react-native";
-import io from "socket.io-client";
+import { StyleSheet, Button, View } from "react-native";
+import Driver from "./screens/Driver";
+import Passenger from "./screens/Passenger";
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chatMessage: "",
-      chatMessages: []
+      isDriver: false,
+      isPassenger: false
     };
   }
 
-  componentDidMount() {
-    this.socket = io("http://192.168.0.27:3000");
-    this.socket.on("chat message", msg => {
-      this.setState({ chatMessages: [...this.state.chatMessages, msg] });
-    });
-  }
-
-  submitChatMessage() {
-    this.socket.emit("chat message", this.state.chatMessage);
-    this.setState({ chatMessage: "" });
-  }
-
   render() {
-    const chatMessages = this.state.chatMessages.map(chatMessage => (
-      <Text key={chatMessage}>{chatMessage}</Text>
-    ));
+    if (this.state.isDriver) {
+      return <Driver />;
+    }
+
+    if (this.state.isPassenger) {
+      return <Passenger />;
+    }
 
     return (
       <View style={styles.container}>
-        <TextInput
-          style={{ height: 40, borderWidth: 2 }}
-          autoCorrect={false}
-          value={this.state.chatMessage}
-          onSubmitEditing={() => this.submitChatMessage()}
-          onChangeText={chatMessage => {
-            this.setState({ chatMessage });
+        <Button
+          onPress={() => {
+            this.setState({ isDriver: true });
           }}
+          title="Driver"
         />
-        {chatMessages}
+        <Button
+          onPress={() => {
+            this.setState({ isPassenger: true });
+          }}
+          title="Passenger"
+        />
       </View>
     );
   }
@@ -47,7 +42,6 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#F5FCFF"
+    marginTop: 30
   }
 });
