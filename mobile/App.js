@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { TextInput, StyleSheet, Text, View } from "react-native";
-import MapView from "react-native-maps";
+import MapView, { Polyline } from "react-native-maps";
 import apiKey from "./google_api_key";
+import PolyLine from "@mapbox/polyline";
 
 export default class App extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ export default class App extends Component {
       latitude: 0,
       longitude: 0,
       destination: "",
-      predictions: []
+      predictions: [],
+      pointCoords: []
     };
   }
 
@@ -23,10 +25,33 @@ export default class App extends Component {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         });
+        this.getRouteDirections();
       },
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
     );
+  }
+
+  async getRouteDirections() {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${
+          this.state.latitude
+        },${
+          this.state.longitude
+        }&destination=Googleplex&key=AIzaSyBS3GdBm6-8tAbdAUavnq8GIyWHS1IJZgk`
+      );
+      const json = await response.json();
+      console.log(json);
+      const points = PolyLine.decode(json.routes[0].overview_polyline.points);
+      console.log(points);
+      const pointCoords = points.map(point => {
+        return { latitude: point[0], longitude: point[1] };
+      });
+      this.setState({ pointCoords });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async onChangeDestination(destination) {
@@ -53,6 +78,8 @@ export default class App extends Component {
       </Text>
     ));
 
+    console.log(this.state.pointCoords);
+
     return (
       <View style={styles.container}>
         <MapView
@@ -64,7 +91,13 @@ export default class App extends Component {
             longitudeDelta: 0.0121
           }}
           showsUserLocation={true}
-        />
+        >
+          <Polyline
+            coordinates={this.state.pointCoords}
+            strokeWidth={4}
+            strokeColor="red"
+          />
+        </MapView>
         <TextInput
           placeholder="Enter destination..."
           style={styles.destinationInput}
