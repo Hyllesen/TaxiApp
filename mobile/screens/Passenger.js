@@ -99,9 +99,10 @@ export default class Passenger extends Component {
         <TextInput
           placeholder="Enter location.."
           style={styles.destinationInput}
-          onChangeText={destination =>
-            this.onChangeDestinationDebounced(destination)
-          }
+          onChangeText={destination => {
+            this.setState({ destination });
+            this.onChangeDestinationDebounced(destination);
+          }}
           value={this.state.destination}
         />
         {locationPredictions}
