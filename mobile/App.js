@@ -3,13 +3,9 @@ import {
   TextInput,
   StyleSheet,
   Text,
-  Image,
   View,
-  TouchableHighlight,
-  Button,
   Keyboard,
-  TouchableOpacity,
-  Platform
+  TouchableHighlight
 } from "react-native";
 import MapView, { Polyline, Marker } from "react-native-maps";
 import apiKey from "./google_api_key";
@@ -68,9 +64,7 @@ export default class App extends Component {
         destination: destinationName
       });
       Keyboard.dismiss();
-      this.map.fitToCoordinates(pointCoords, {
-        edgePadding: { top: 20, right: 20, bottom: 20, left: 20 }
-      });
+      this.map.fitToCoordinates(pointCoords);
     } catch (error) {
       console.error(error);
     }
@@ -95,9 +89,10 @@ export default class App extends Component {
   }
 
   render() {
-    let destinationMarker = null;
-    if (this.state.pointCoords != null && this.state.pointCoords.length > 1) {
-      destinationMarker = (
+    let marker = null;
+
+    if (this.state.pointCoords.length > 1) {
+      marker = (
         <Marker
           coordinate={this.state.pointCoords[this.state.pointCoords.length - 1]}
         />
@@ -125,6 +120,9 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         <MapView
+          ref={map => {
+            this.map = map;
+          }}
           style={styles.map}
           region={{
             latitude: this.state.latitude,
@@ -132,18 +130,14 @@ export default class App extends Component {
             latitudeDelta: 0.015,
             longitudeDelta: 0.0121
           }}
-          ref={map => {
-            this.map = map;
-          }}
-          fitToElements={true}
           showsUserLocation={true}
         >
-          {destinationMarker}
           <Polyline
             coordinates={this.state.pointCoords}
             strokeWidth={4}
             strokeColor="red"
           />
+          {marker}
         </MapView>
         <TextInput
           placeholder="Enter destination..."
