@@ -3,8 +3,13 @@ import {
   TextInput,
   StyleSheet,
   Text,
+  Image,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  Button,
+  Keyboard,
+  TouchableOpacity,
+  Platform
 } from "react-native";
 import MapView, { Polyline, Marker } from "react-native-maps";
 import apiKey from "./google_api_key";
@@ -37,7 +42,7 @@ export default class App extends Component {
           longitude: position.coords.longitude
         });
       },
-      error => this.setState({ error: error.message }),
+      error => console.error(error),
       { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
     );
   }
@@ -62,6 +67,7 @@ export default class App extends Component {
         predictions: [],
         destination: destinationName
       });
+      Keyboard.dismiss();
       this.map.fitToCoordinates(pointCoords, {
         edgePadding: { top: 20, right: 20, bottom: 20, left: 20 }
       });
@@ -71,11 +77,11 @@ export default class App extends Component {
   }
 
   async onChangeDestination(destination) {
-    this.setState({ destination });
     const apiUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${apiKey}
     &input=${destination}&location=${this.state.latitude},${
       this.state.longitude
     }&radius=2000`;
+    console.log(apiUrl);
     try {
       const result = await fetch(apiUrl);
       const json = await result.json();
@@ -143,7 +149,9 @@ export default class App extends Component {
           placeholder="Enter destination..."
           style={styles.destinationInput}
           value={this.state.destination}
+          clearButtonMode="always"
           onChangeText={destination => {
+            console.log(destination);
             this.setState({ destination });
             this.onChangeDestinationDebounced(destination);
           }}
