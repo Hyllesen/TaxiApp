@@ -24,4 +24,4 @@ Check out the 01_SocketIoChat branch to see how Socket.io chat can be done in Re
 
 **Please use your own local ip inside the client!** 
 
-mobile/App.js replace the "192.168.1.32" ip with your own local ip adresss.
+inside componentDidMount(), mobile/App.js, replace the "http://192.168.0.27:3000" ip with your own local ip adresss.
