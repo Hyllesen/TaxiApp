@@ -16,7 +16,6 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: "",
       latitude: 0,
       longitude: 0,
       destination: "",
@@ -64,7 +63,9 @@ export default class App extends Component {
         destination: destinationName
       });
       Keyboard.dismiss();
-      this.map.fitToCoordinates(pointCoords);
+      this.map.fitToCoordinates(pointCoords, {
+        edgePadding: { top: 20, bottom: 20, left: 20, right: 20 }
+      });
     } catch (error) {
       console.error(error);
     }
@@ -90,12 +91,20 @@ export default class App extends Component {
 
   render() {
     let marker = null;
+    let getDriver = null;
 
     if (this.state.pointCoords.length > 1) {
       marker = (
         <Marker
           coordinate={this.state.pointCoords[this.state.pointCoords.length - 1]}
         />
+      );
+      getDriver = (
+        <View style={styles.findDriver}>
+          <View>
+            <Text style={styles.findDriverText}>REQUEST 🚗</Text>
+          </View>
+        </View>
       );
     }
 
@@ -146,17 +155,32 @@ export default class App extends Component {
           clearButtonMode="always"
           onChangeText={destination => {
             console.log(destination);
-            this.setState({ destination });
+            this.setState({ destination, pointCoords: [] });
             this.onChangeDestinationDebounced(destination);
           }}
         />
         {predictions}
+        {getDriver}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  findDriver: {
+    backgroundColor: "black",
+    marginTop: "auto",
+    margin: 20,
+    padding: 15,
+    paddingLeft: 30,
+    paddingRight: 30,
+    alignSelf: "center"
+  },
+  findDriverText: {
+    fontSize: 20,
+    color: "white",
+    fontWeight: "600"
+  },
   suggestions: {
     backgroundColor: "white",
     padding: 5,
