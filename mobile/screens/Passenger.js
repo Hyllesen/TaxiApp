@@ -11,6 +11,8 @@ import MapView, { Polyline, Marker } from "react-native-maps";
 import apiKey from "../google_api_key";
 import _ from "lodash";
 import PolyLine from "@mapbox/polyline";
+import socketIO from "socket.io-client";
+import BottomButton from "../components/BottomButton";
 
 export default class Passenger extends Component {
   constructor(props) {
@@ -20,7 +22,8 @@ export default class Passenger extends Component {
       longitude: 0,
       destination: "",
       predictions: [],
-      pointCoords: []
+      pointCoords: [],
+      routeResponse: {}
     };
     this.onChangeDestinationDebounced = _.debounce(
       this.onChangeDestination,
@@ -60,7 +63,8 @@ export default class Passenger extends Component {
       this.setState({
         pointCoords,
         predictions: [],
-        destination: destinationName
+        destination: destinationName,
+        routeResponse: json
       });
       Keyboard.dismiss();
       this.map.fitToCoordinates(pointCoords, {
@@ -89,6 +93,16 @@ export default class Passenger extends Component {
     }
   }
 
+  async requestDriver() {
+    var socket = socketIO.connect("http://192.168.0.27:3000");
+
+    socket.on("connect", () => {
+      console.log("client connected");
+      //Request a taxi!
+      socket.emit("taxiRequest", this.state.routeResponse);
+    });
+  }
+
   render() {
     let marker = null;
     let getDriver = null;
@@ -100,11 +114,10 @@ export default class Passenger extends Component {
         />
       );
       getDriver = (
-        <View style={styles.findDriver}>
-          <View>
-            <Text style={styles.findDriverText}>REQUEST 🚗</Text>
-          </View>
-        </View>
+        <BottomButton
+          onPressFunction={() => this.requestDriver()}
+          buttonText="REQUEST 🚗"
+        />
       );
     }
 

@@ -1,15 +1,10 @@
 import React, { Component } from "react";
-import {
-  TextInput,
-  StyleSheet,
-  Text,
-  View,
-  Keyboard,
-  TouchableHighlight
-} from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import MapView, { Polyline, Marker } from "react-native-maps";
+import BottomButton from "../components/BottomButton";
 import apiKey from "../google_api_key";
 import PolyLine from "@mapbox/polyline";
+import socketIO from "socket.io-client";
 
 export default class Driver extends Component {
   constructor(props) {
@@ -19,7 +14,8 @@ export default class Driver extends Component {
       longitude: 0,
       destination: "",
       predictions: [],
-      pointCoords: []
+      pointCoords: [],
+      lookingForPassengers: false
     };
   }
 
@@ -35,6 +31,19 @@ export default class Driver extends Component {
       error => console.error(error),
       { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
     );
+  }
+
+  findPassengers() {
+    var socket = socketIO.connect("http://192.168.0.27:3000");
+
+    socket.on("connect", () => {
+      socket.emit("passengerRequest");
+    });
+
+    socket.on("taxiRequest", data => {
+      console.log(data);
+      Alert.alert("Someone wants a taxi!");
+    });
   }
 
   render() {
@@ -70,6 +79,12 @@ export default class Driver extends Component {
           />
           {marker}
         </MapView>
+        <BottomButton
+          onPressFunction={() => {
+            this.findPassengers();
+          }}
+          buttonText="FIND PASSENGERS 👥"
+        />
       </View>
     );
   }
