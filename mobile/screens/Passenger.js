@@ -23,7 +23,8 @@ export default class Passenger extends Component {
       destination: "",
       predictions: [],
       pointCoords: [],
-      routeResponse: {}
+      routeResponse: {},
+      lookingForDriver: false
     };
     this.onChangeDestinationDebounced = _.debounce(
       this.onChangeDestination,

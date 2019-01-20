@@ -9,6 +9,7 @@ export default class BottomButton extends Component {
         <TouchableOpacity onPress={() => this.props.onPressFunction()}>
           <View>
             <Text style={styles.bottomButtonText}>{this.props.buttonText}</Text>
+            {this.props.children}
           </View>
         </TouchableOpacity>
       </View>

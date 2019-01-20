@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Alert } from "react-native";
+import { StyleSheet, View, Image, ActivityIndicator } from "react-native";
 import MapView, { Polyline, Marker } from "react-native-maps";
 import BottomButton from "../components/BottomButton";
 import apiKey from "../google_api_key";
@@ -33,27 +33,87 @@ export default class Driver extends Component {
     );
   }
 
+  async getRouteDirections(destinationPlaceId) {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${
+          this.state.latitude
+        },${
+          this.state.longitude
+        }&destination=place_id:${destinationPlaceId}&key=${apiKey}`
+      );
+      const json = await response.json();
+      console.log(json);
+      const points = PolyLine.decode(json.routes[0].overview_polyline.points);
+      const pointCoords = points.map(point => {
+        return { latitude: point[0], longitude: point[1] };
+      });
+      this.setState({
+        pointCoords,
+        routeResponse: json
+      });
+      this.map.fitToCoordinates(pointCoords, {
+        edgePadding: { top: 20, bottom: 20, left: 20, right: 20 }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   findPassengers() {
-    var socket = socketIO.connect("http://192.168.0.27:3000");
+    if (!this.state.lookingForPassengers) {
+      this.setState({ lookingForPassengers: true });
 
-    socket.on("connect", () => {
-      socket.emit("passengerRequest");
-    });
+      console.log(this.state.lookingForPassengers);
 
-    socket.on("taxiRequest", data => {
-      console.log(data);
-      Alert.alert("Someone wants a taxi!");
-    });
+      var socket = socketIO.connect("http://192.168.0.27:3000");
+
+      socket.on("connect", () => {
+        socket.emit("passengerRequest");
+      });
+
+      socket.on("taxiRequest", routeResponse => {
+        console.log(routeResponse);
+        this.setState({
+          lookingForPassengers: false,
+          passengerFound: true,
+          routeResponse
+        });
+        this.getRouteDirections(routeResponse.geocoded_waypoints[0].place_id);
+      });
+    }
   }
 
   render() {
-    let marker = null;
+    let endMarker = null;
+    let startMarker = null;
+    let findingPassengerActIndicator = null;
+    let passengerSearchText = "FIND PASSENGERS 👥";
+
+    if (this.state.lookingForPassengers) {
+      passengerSearchText = "FINDING PASSENGERS...";
+      findingPassengerActIndicator = (
+        <ActivityIndicator
+          size="large"
+          animating={this.state.lookingForPassengers}
+        />
+      );
+    }
+
+    if (this.state.passengerFound) {
+      passengerSearchText = "FOUND PASSENGER! ACCEPT RIDE?";
+    }
 
     if (this.state.pointCoords.length > 1) {
-      marker = (
+      endMarker = (
         <Marker
           coordinate={this.state.pointCoords[this.state.pointCoords.length - 1]}
-        />
+        >
+          <Image
+            style={{ width: 40, height: 40 }}
+            source={require("../images/person-marker.png")}
+          />
+        </Marker>
       );
     }
 
@@ -77,14 +137,17 @@ export default class Driver extends Component {
             strokeWidth={4}
             strokeColor="red"
           />
-          {marker}
+          {endMarker}
+          {startMarker}
         </MapView>
         <BottomButton
           onPressFunction={() => {
             this.findPassengers();
           }}
-          buttonText="FIND PASSENGERS 👥"
-        />
+          buttonText={passengerSearchText}
+        >
+          {findingPassengerActIndicator}
+        </BottomButton>
       </View>
     );
   }
