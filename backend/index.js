@@ -18,6 +18,7 @@ io.on("connection", socket => {
   });
 
   socket.on("driverLocation", driverLocation => {
+    console.log(driverLocation);
     passengerSocket.emit("driverLocation", driverLocation);
   });
 

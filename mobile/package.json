@@ -12,6 +12,7 @@
     "react": "16.6.3",
     "react-native": "0.57.8",
     "react-native-maps": "^0.22.1",
+    "react-native-mauron85-background-geolocation": "^0.5.0",
     "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
