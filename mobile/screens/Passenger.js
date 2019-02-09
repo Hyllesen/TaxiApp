@@ -6,6 +6,7 @@ import {
   View,
   Keyboard,
   TouchableHighlight,
+  Image,
   ActivityIndicator
 } from "react-native";
 import MapView, { Polyline, Marker } from "react-native-maps";
@@ -25,7 +26,8 @@ export default class Passenger extends Component {
       predictions: [],
       pointCoords: [],
       routeResponse: {},
-      lookingForDriver: false
+      lookingForDriver: false,
+      driverIsOnTheWay: false
     };
     this.onChangeDestinationDebounced = _.debounce(
       this.onChangeDestination,
@@ -104,12 +106,32 @@ export default class Passenger extends Component {
       //Request a taxi!
       socket.emit("taxiRequest", this.state.routeResponse);
     });
+
+    socket.on("driverLocation", driverLocation => {
+      this.setState({
+        lookingForDriver: false,
+        driverIsOnTheWay: true,
+        driverLocation
+      });
+    });
   }
 
   render() {
     let marker = null;
     let getDriver = null;
     let findingDriverActIndicator = null;
+    let driverMarker = null;
+
+    if (this.state.driverIsOnTheWay) {
+      driverMarker = (
+        <Marker coordinate={this.state.driverLocation}>
+          <Image
+            source={require("../images/carIcon.png")}
+            style={{ width: 40, height: 40 }}
+          />
+        </Marker>
+      );
+    }
 
     if (this.state.lookingForDriver) {
       findingDriverActIndicator = (
@@ -175,6 +197,7 @@ export default class Passenger extends Component {
             strokeColor="red"
           />
           {marker}
+          {driverMarker}
         </MapView>
         <TextInput
           placeholder="Enter destination..."

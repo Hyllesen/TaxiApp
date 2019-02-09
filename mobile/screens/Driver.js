@@ -17,6 +17,9 @@ export default class Driver extends Component {
       pointCoords: [],
       lookingForPassengers: false
     };
+    this.acceptPassengerRequest = this.acceptPassengerRequest.bind(this);
+    this.findPassengers = this.findPassengers.bind(this);
+    this.socket = null;
   }
 
   componentDidMount() {
@@ -66,13 +69,13 @@ export default class Driver extends Component {
 
       console.log(this.state.lookingForPassengers);
 
-      var socket = socketIO.connect("http://192.168.0.27:3000");
+      this.socket = socketIO.connect("http://192.168.0.27:3000");
 
-      socket.on("connect", () => {
-        socket.emit("passengerRequest");
+      this.socket.on("connect", () => {
+        this.socket.emit("passengerRequest");
       });
 
-      socket.on("taxiRequest", routeResponse => {
+      this.socket.on("taxiRequest", routeResponse => {
         console.log(routeResponse);
         this.setState({
           lookingForPassengers: false,
@@ -84,11 +87,20 @@ export default class Driver extends Component {
     }
   }
 
+  acceptPassengerRequest() {
+    //Send driver location to passenger
+    this.socket.emit("driverLocation", {
+      latitude: this.state.latitude,
+      longitude: this.state.longitude
+    });
+  }
+
   render() {
     let endMarker = null;
     let startMarker = null;
     let findingPassengerActIndicator = null;
     let passengerSearchText = "FIND PASSENGERS 👥";
+    let bottomButtonFunction = this.findPassengers;
 
     if (this.state.lookingForPassengers) {
       passengerSearchText = "FINDING PASSENGERS...";
@@ -102,6 +114,7 @@ export default class Driver extends Component {
 
     if (this.state.passengerFound) {
       passengerSearchText = "FOUND PASSENGER! ACCEPT RIDE?";
+      bottomButtonFunction = this.acceptPassengerRequest;
     }
 
     if (this.state.pointCoords.length > 1) {
@@ -141,9 +154,7 @@ export default class Driver extends Component {
           {startMarker}
         </MapView>
         <BottomButton
-          onPressFunction={() => {
-            this.findPassengers();
-          }}
+          onPressFunction={bottomButtonFunction}
           buttonText={passengerSearchText}
         >
           {findingPassengerActIndicator}
