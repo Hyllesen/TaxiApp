@@ -5,7 +5,8 @@ import {
   Text,
   View,
   Keyboard,
-  TouchableHighlight
+  TouchableHighlight,
+  ActivityIndicator
 } from "react-native";
 import MapView, { Polyline, Marker } from "react-native-maps";
 import apiKey from "../google_api_key";
@@ -95,6 +96,7 @@ export default class Passenger extends Component {
   }
 
   async requestDriver() {
+    this.setState({ lookingForDriver: true });
     var socket = socketIO.connect("http://192.168.0.27:3000");
 
     socket.on("connect", () => {
@@ -107,6 +109,16 @@ export default class Passenger extends Component {
   render() {
     let marker = null;
     let getDriver = null;
+    let findingDriverActIndicator = null;
+
+    if (this.state.lookingForDriver) {
+      findingDriverActIndicator = (
+        <ActivityIndicator
+          size="large"
+          animating={this.state.lookingForDriver}
+        />
+      );
+    }
 
     if (this.state.pointCoords.length > 1) {
       marker = (
@@ -118,7 +130,9 @@ export default class Passenger extends Component {
         <BottomButton
           onPressFunction={() => this.requestDriver()}
           buttonText="REQUEST 🚗"
-        />
+        >
+          {findingDriverActIndicator}
+        </BottomButton>
       );
     }
 
