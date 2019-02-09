@@ -108,6 +108,10 @@ export default class Passenger extends Component {
     });
 
     socket.on("driverLocation", driverLocation => {
+      const pointCoords = [...this.state.pointCoords, driverLocation];
+      this.map.fitToCoordinates(pointCoords, {
+        edgePadding: { top: 40, bottom: 20, left: 20, right: 20 }
+      });
       this.setState({
         lookingForDriver: false,
         driverIsOnTheWay: true,
@@ -183,7 +187,7 @@ export default class Passenger extends Component {
             this.map = map;
           }}
           style={styles.map}
-          region={{
+          initialRegion={{
             latitude: this.state.latitude,
             longitude: this.state.longitude,
             latitudeDelta: 0.015,
