@@ -20,8 +20,8 @@ export default class Passenger extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitude: 0,
-      longitude: 0,
+      latitude: null,
+      longitude: null,
       destination: "",
       predictions: [],
       pointCoords: [],

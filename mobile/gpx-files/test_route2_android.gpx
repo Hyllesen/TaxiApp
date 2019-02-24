@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" creator="mapstogpx.com" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd">
+  <metadata>
+    <link href="http://www.mapstogpx.com">
+      <text>Sverrir Sigmundarson</text>
+    </link>
+    <!--desc>Map data ©2019 Google</desc-->
+    <!--copyright author="Google Inc">
+    	<year>2019</year>
+    	<license>https://developers.google.com/maps/terms</license>
+    </copyright-->
+    <!--url>https://www.google.com/maps/dir/Googleplex,+1600+Amphitheatre+Pkwy,+Mountain+View,+CA+94043,+USA/37.4200742,-122.080517/@37.4205864,-122.0819946,18z/data=!4m9!4m8!1m5!1m1!1s0x808fba02425dad8f:0x6c296c66619367e0!2m2!1d-122.0840575!2d37.4219999!1m0!3e0?shorturl=1&hl=en</url-->
+    <time>2019-02-20T16:57:48Z</time>
+  </metadata>
+<trk>
+  <name>Googleplex to Mountain View</name>
+  <number>1</number>
+  <trkseg>
+  <trkpt lat="37.4213154" lon="-122.0837217">
+    <name>TP001</name>
+    <time>2019-02-20T16:57:48Z</time>
+  </trkpt>
+  <trkpt lat="37.42119" lon="-122.08373">
+    <name>TP002</name>
+    <time>2019-02-20T16:57:53Z</time>
+  </trkpt>
+  <trkpt lat="37.4211901" lon="-122.0837303">
+    <name>TP003</name>
+    <time>2019-02-20T16:57:54Z</time>
+  </trkpt>
+  <trkpt lat="37.42119" lon="-122.08368">
+    <name>TP004</name>
+    <time>2019-02-20T16:57:57Z</time>
+  </trkpt>
+  <trkpt lat="37.42115" lon="-122.083">
+    <name>TP005</name>
+    <time>2019-02-20T16:58:25Z</time>
+  </trkpt>
+  <trkpt lat="37.42114" lon="-122.0829">
+    <name>TP006</name>
+    <time>2019-02-20T16:58:30Z</time>
+  </trkpt>
+  <trkpt lat="37.4211417" lon="-122.0829044">
+    <name>TP007</name>
+    <time>2019-02-20T16:58:31Z</time>
+  </trkpt>
+  <trkpt lat="37.42104" lon="-122.08291">
+    <name>TP008</name>
+    <time>2019-02-20T16:58:36Z</time>
+  </trkpt>
+  <trkpt lat="37.42095" lon="-122.08292">
+    <name>TP009</name>
+    <time>2019-02-20T16:58:41Z</time>
+  </trkpt>
+  <trkpt lat="37.42088" lon="-122.08292">
+    <name>TP010</name>
+    <time>2019-02-20T16:58:45Z</time>
+  </trkpt>
+  <trkpt lat="37.4208829" lon="-122.0829206">
+    <name>TP011</name>
+    <time>2019-02-20T16:58:46Z</time>
+  </trkpt>
+  <trkpt lat="37.42077" lon="-122.08292">
+    <name>TP012</name>
+    <time>2019-02-20T16:58:49Z</time>
+  </trkpt>
+  <trkpt lat="37.42077" lon="-122.0828">
+    <name>TP013</name>
+    <time>2019-02-20T16:58:51Z</time>
+  </trkpt>
+  <trkpt lat="37.42068" lon="-122.08119">
+    <name>TP014</name>
+    <time>2019-02-20T16:59:15Z</time>
+  </trkpt>
+  <trkpt lat="37.42064" lon="-122.08062">
+    <name>TP015</name>
+    <time>2019-02-20T16:59:24Z</time>
+  </trkpt>
+  <trkpt lat="37.42063" lon="-122.08047">
+    <name>TP016</name>
+    <time>2019-02-20T16:59:27Z</time>
+  </trkpt>
+  <trkpt lat="37.4206348" lon="-122.0804736">
+    <name>TP017</name>
+    <time>2019-02-20T16:59:28Z</time>
+  </trkpt>
+  <trkpt lat="37.42055" lon="-122.08048">
+    <name>TP018</name>
+    <time>2019-02-20T16:59:30Z</time>
+  </trkpt>
+  <trkpt lat="37.42031" lon="-122.08048">
+    <name>TP019</name>
+    <time>2019-02-20T16:59:35Z</time>
+  </trkpt>
+  <trkpt lat="37.42007" lon="-122.08048">
+    <name>TP020</name>
+    <time>2019-02-20T16:59:40Z</time>
+  </trkpt>
+  <trkpt lat="37.4200729" lon="-122.0804781">
+    <name>TP021</name>
+    <time>2019-02-20T16:59:41Z</time>
+  </trkpt>
+  </trkseg>
+</trk>
+</gpx>
