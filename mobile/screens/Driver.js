@@ -31,16 +31,20 @@ export default class Driver extends Component {
     this.socket = null;
   }
 
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchId);
+  }
+
   componentDidMount() {
     //Get current location and set initial region to this
-    navigator.geolocation.getCurrentPosition(
+    this.watchId = navigator.geolocation.watchPosition(
       position => {
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         });
       },
-      error => console.error(error),
+      error => console.log(error),
       { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
     );
     BackgroundGeolocation.configure({
@@ -178,6 +182,8 @@ export default class Driver extends Component {
     let findingPassengerActIndicator = null;
     let passengerSearchText = "FIND PASSENGERS 👥";
     let bottomButtonFunction = this.findPassengers;
+
+    if (!this.state.latitude) return null;
 
     if (this.state.lookingForPassengers) {
       passengerSearchText = "FINDING PASSENGERS...";

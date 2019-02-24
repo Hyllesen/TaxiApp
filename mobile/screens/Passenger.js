@@ -35,16 +35,20 @@ export default class Passenger extends Component {
     );
   }
 
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchId);
+  }
+
   componentDidMount() {
     //Get current location and set initial region to this
-    navigator.geolocation.getCurrentPosition(
+    this.watchId = navigator.geolocation.watchPosition(
       position => {
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         });
       },
-      error => console.error(error),
+      error => console.log(error),
       { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
     );
   }
@@ -125,6 +129,8 @@ export default class Passenger extends Component {
     let getDriver = null;
     let findingDriverActIndicator = null;
     let driverMarker = null;
+
+    if (!this.state.latitude) return null;
 
     if (this.state.driverIsOnTheWay) {
       driverMarker = (
