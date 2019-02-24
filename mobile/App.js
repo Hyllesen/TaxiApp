@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import Driver from "./screens/Driver";
 import Passenger from "./screens/Passenger";
+import GenericContainer from "./components/GenericContainer";
+
+const DriverWithGenericContainer = GenericContainer(Driver);
+const PassengerWithGenericContainer = GenericContainer(Passenger);
 
 export default class App extends Component {
   constructor(props) {
@@ -16,11 +20,11 @@ export default class App extends Component {
 
   render() {
     if (this.state.isDriver) {
-      return <Driver />;
+      return <DriverWithGenericContainer />;
     }
 
     if (this.state.isPassenger) {
-      return <Passenger />;
+      return <PassengerWithGenericContainer />;
     }
 
     return (
