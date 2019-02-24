@@ -91,7 +91,7 @@ export default class Driver extends Component {
           routeResponse.geocoded_waypoints[0].place_id
         );
         this.map.fitToCoordinates(this.props.pointCoords, {
-          edgePadding: { top: 20, bottom: 20, left: 20, right: 20 }
+          edgePadding: { top: 140, bottom: 140, left: 20, right: 20 }
         });
       });
     }

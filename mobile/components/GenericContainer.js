@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Keyboard } from "react-native";
+import { Keyboard, PermissionsAndroid, Platform } from "react-native";
 import PolyLine from "@mapbox/polyline";
 import apiKey from "../google_api_key";
 
@@ -21,18 +21,45 @@ function genericContainer(WrappedComponent) {
       navigator.geolocation.clearWatch(this.watchId);
     }
 
-    componentDidMount() {
+    async checkAndroidPermissions() {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: "Taxi App",
+            message:
+              "Taxi App needs to use your location to show routes and get taxis"
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+
+    async componentDidMount() {
       //Get current location and set initial region to this
-      this.watchId = navigator.geolocation.watchPosition(
-        position => {
-          this.setState({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          });
-        },
-        error => console.log(error),
-        { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
-      );
+      let granted = false;
+      if (Platform.OS === "ios") {
+        granted = true;
+      } else {
+        granted = await this.checkAndroidPermissions();
+      }
+      if (granted)
+        this.watchId = navigator.geolocation.watchPosition(
+          position => {
+            this.setState({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            });
+          },
+          error => console.log(error),
+          { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
+        );
     }
 
     async getRouteDirections(destinationPlaceId, destinationName) {
