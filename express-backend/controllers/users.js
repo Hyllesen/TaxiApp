@@ -23,6 +23,12 @@ exports.createUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
+    if (User.findOne({ email })) {
+      return res
+        .status(409)
+        .send(`An account with the mail ${email} already exists`);
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = new User({
