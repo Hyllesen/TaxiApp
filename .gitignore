@@ -1,2 +1,3 @@
 node_modules
 google_api_key.js
+express-backend/config/mongodb.js
