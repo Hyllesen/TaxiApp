@@ -2,24 +2,20 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoDbConnectionString = require("./config/mongodb");
 const mongoose = require("mongoose");
+const authRouter = require("./routes/auth");
 const userRouter = require("./routes/users");
+const authMiddleware = require("./middleware/auth");
+const errorMiddleware = require("./middleware/error");
 const PORT = 4000;
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use("/auth", authRouter);
+app.use("*", authMiddleware);
 app.use("/users", userRouter);
-
-app.use((error, req, res, next) => {
-  console.log(error);
-  if (!error.statusCode) {
-    error.statusCode = 500;
-  }
-  const status = error.statusCode;
-  const message = error.message;
-  res.status(status).json({ message });
-});
+app.use(errorMiddleware);
 
 mongoose
   .connect(mongoDbConnectionString, { useNewUrlParser: true })
