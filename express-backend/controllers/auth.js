@@ -31,9 +31,11 @@ exports.createUser = async (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
 
     if (await User.findOne({ email })) {
-      return res
-        .status(409)
-        .send(`An account with the mail ${email} already exists`);
+      const error = new Error(
+        `An account with the mail ${email} already exists`
+      );
+      error.statusCode = 409;
+      throw error;
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
