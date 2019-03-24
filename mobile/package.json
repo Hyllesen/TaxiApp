@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@mapbox/polyline": "^1.0.0",
+    "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "react": "16.6.3",
     "react-native": "0.57.8",
