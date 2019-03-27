@@ -4,6 +4,7 @@ import Driver from "./screens/Driver";
 import Passenger from "./screens/Passenger";
 import Login from "./screens/Login";
 import GenericContainer from "./components/GenericContainer";
+import DriverOrPassenger from "./screens/DriverOrPassenger";
 
 const DriverWithGenericContainer = GenericContainer(Driver);
 const PassengerWithGenericContainer = GenericContainer(Passenger);
@@ -16,16 +17,16 @@ export default class App extends Component {
       isPassenger: false,
       token: ""
     };
-    this.handleChangeToken = this.handleChangeToken.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChangeToken(token) {
-    this.setState({ token });
+  handleChange(name, value) {
+    this.setState({ [name]: value });
   }
 
   render() {
     if (this.state.token === "") {
-      return <Login handleChangeToken={this.handleChangeToken} />;
+      return <Login handleChange={this.handleChange} />;
     }
 
     if (this.state.isDriver) {
@@ -36,24 +37,6 @@ export default class App extends Component {
       return <PassengerWithGenericContainer token={this.state.token} />;
     }
 
-    return (
-      <View style={styles.container}>
-        <Button
-          onPress={() => this.setState({ isPassenger: true })}
-          title="Passenger"
-        />
-        <Button
-          onPress={() => this.setState({ isDriver: true })}
-          title="Driver"
-        />
-      </View>
-    );
+    return <DriverOrPassenger handleChange={this.handleChange} />;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 50
-  }
-});

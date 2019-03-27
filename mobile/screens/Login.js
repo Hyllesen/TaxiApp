@@ -39,7 +39,7 @@ export default class Login extends Component {
       this.setState({ errorMessage: "" });
       const { email, password } = this.state;
       const result = await axios.post("/auth/login", { email, password });
-      this.props.handleChangeToken(result.data.token);
+      this.props.handleChange("token", result.data.token);
     } catch (error) {
       this.setState({ errorMessage: error.response.data.message });
     }
