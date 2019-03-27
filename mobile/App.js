@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import Driver from "./screens/Driver";
 import Passenger from "./screens/Passenger";
+import Login from "./screens/Login";
 import GenericContainer from "./components/GenericContainer";
 
 const DriverWithGenericContainer = GenericContainer(Driver);
@@ -12,19 +13,27 @@ export default class App extends Component {
     super(props);
     this.state = {
       isDriver: false,
-      isPassenger: false
+      isPassenger: false,
+      token: ""
     };
+    this.handleChangeToken = this.handleChangeToken.bind(this);
   }
 
-  componentDidMount() {}
+  handleChangeToken(token) {
+    this.setState({ token });
+  }
 
   render() {
+    if (this.state.token === "") {
+      return <Login handleChangeToken={this.handleChangeToken} />;
+    }
+
     if (this.state.isDriver) {
-      return <DriverWithGenericContainer />;
+      return <DriverWithGenericContainer token={this.state.token} />;
     }
 
     if (this.state.isPassenger) {
-      return <PassengerWithGenericContainer />;
+      return <PassengerWithGenericContainer token={this.state.token} />;
     }
 
     return (
