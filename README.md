@@ -8,6 +8,8 @@ This project is a companion to a video series from reactnativetutorial.net.
 
 Video tutorial can be seen here: https://youtu.be/cfggyE1Ptbc
 
+Check out the Chat App Udemy course here: https://bit.ly/2N8rYcT
+
 ## Prerequisites
 
 Please have React Native installed first, check out https://facebook.github.io/react-native/docs/getting-started.html
